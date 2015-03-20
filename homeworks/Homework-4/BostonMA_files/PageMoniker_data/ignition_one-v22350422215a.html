@@ -1,0 +1,46 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+    </head>
+    <body>
+        <script type="text/javascript">
+            var loadElem = function(tag, attribs) {
+                if (!tag) {
+                    return;
+                }
+                var elem = document.createElement(tag);
+                for (var key in attribs) {
+                    if (attribs.hasOwnProperty(key)) {
+                        elem[key] = attribs[key];
+                    }
+                }
+                document.body.appendChild(elem);
+            };
+            var loadScript = function(src, attribs) {
+                attribs = attribs || {};
+                attribs.src = src;
+                attribs.type = attribs.type || 'text/javascript';
+                loadElem('script', attribs);
+            };
+
+            var context = {};
+            context.get = function(key) {
+                return this.hasOwnProperty(key) ? this[key] : '';
+            };
+            (function() {
+                var pairs = window.location.hash.substring(1).split('&');
+                for (var i = 0; i < pairs.length; i++) {
+                    var pair = pairs[i].split('=');
+                    context[pair[0]] = pair[1];
+                }
+            })();
+
+            if (context.isClickout === 'true') {
+                loadScript('https://com-tripadvise.netmng.com/conv/?aid=2706&cpid=306403226&p1=' + context.get('userUnique') + '&p2=' + context.get('dateIn') + '&p3=' + context.get('dateOut') + '&p4=' + context.get('curLocId') + '&p5=' + context.get('serverName'), {defer: 'defer'});
+            } else {
+                loadScript('https://com-tripadvise.netmng.com/?aid=2706&p1=' + context.get('userUnique') + '&p2=' + context.get('dateIn') + '&p3=' + context.get('dateOut') + '&p4=' + context.get('curLocId') + '&p5=' + context.get('serverName'), {defer: 'defer'});
+            }
+        </script><script type="text/javascript" src="ignition_one-v22350422215a_data/a.js" defer="defer"></script>
+    
+
+</body></html>

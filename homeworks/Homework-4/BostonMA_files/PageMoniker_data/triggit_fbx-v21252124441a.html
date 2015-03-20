@@ -1,0 +1,174 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+    </head>
+    <body>
+        <script type="text/javascript">
+            var loadElem = function(tag, attribs) {
+                if (!tag) {
+                    return;
+                }
+                var elem = document.createElement(tag);
+                for (var key in attribs) {
+                    if (attribs.hasOwnProperty(key)) {
+                        elem[key] = attribs[key];
+                    }
+                }
+                document.body.appendChild(elem);
+            };
+            var loadScript = function(src, attribs) {
+                attribs = attribs || {};
+                attribs.src = src;
+                attribs.type = attribs.type || 'text/javascript';
+                loadElem('script', attribs);
+            };
+
+            var context = {};
+            context.get = function(key) {
+                return this.hasOwnProperty(key) ? this[key] : '';
+            };
+            (function() {
+                var pairs = window.location.hash.substring(1).split('&');
+                for (var i = 0; i < pairs.length; i++) {
+                    var pair = pairs[i].split('=');
+                    context[pair[0]] = pair[1];
+                }
+            })();
+            
+            var newIn = '', newOut = '';
+            if (context.hasOwnProperty('dateIn')) {
+                newIn = context.dateIn.substring(5, 7) + '/' +
+                        context.dateIn.substring(8, 10) + '/' +
+                        context.dateIn.substring(0, 4);
+            }
+            if (context.hasOwnProperty('dateOut')) {
+                newOut = context.dateOut.substring(5, 7) + '/' +
+                         context.dateOut.substring(8, 10) + '/' +
+                         context.dateOut.substring(0, 4);
+            }
+
+            var servlet = context.get('servlet'), sourceCategory = context.get('sourceCategory'), sourceTraffic = context.get('tasource');
+            var segment, triggit_data;
+            if (servlet === 'Home') {
+                segment = 'tahome';
+                triggit_data = {
+                    pos: context.get('locale'),
+                    tas: '6',
+                    tacid: context.get('userUnique'),
+                    tasplit: context.get('taSplit'),
+                    tapv: context.get('seqId'),
+                    tasource: sourceTraffic
+                };
+            }
+            else if (servlet === 'Hotel_Review' || servlet === 'ShowUserReviews') {
+                segment = 'tahotel';
+                triggit_data = {
+                    ppk: context.get('locale') + 'Pe' + context.get('propId'),
+                    pt: 'hotel',
+                    pos: context.get('locale'),
+                    tas: '1',
+                    dd: context.get('dateIn'),
+                    cin: newIn,
+                    cout: newOut,
+                    tauid: context.get('reqUnique'),
+                    tacid: context.get('userUnique'),
+                    tasplit: context.get('taSplit'),
+                    tapv: context.get('seqId'),
+                    tasource: sourceTraffic
+                };
+            }
+            else if (servlet === 'CheapFlights') {
+                segment = 'taflight';
+                triggit_data = {
+                    ppk: context.get('locale') + 'Pe' + context.get('loc1'),
+                    pt: 'flight',
+                    pos: context.get('locale'),
+                    tas: '5',
+                    dd: context.get('dateIn'),
+                    cin: newIn,
+                    cout: newOut,
+                    tauid: context.get('reqUnique'),
+                    tacid: context.get('userUnique'),
+                    tasplit: context.get('taSplit'),
+                    tapv: context.get('seqId'),
+                    tasource: sourceTraffic
+                };
+            }
+            else if (servlet === 'SmartDeals' || servlet === 'Hotels' || servlet === 'HACSearch') {
+                segment = 'tahotel';
+                triggit_data = {
+                    ppk: context.get('locale') + 'Pe' + context.get('geoMostPop'),
+                    pt: 'hotel',
+                    pos: context.get('locale'),
+                    tas: '3',
+                    dd: context.get('dateIn'),
+                    cin: newIn,
+                    cout: newOut,
+                    tauid: context.get('reqUnique'),
+                    tacid: context.get('userUnique'),
+                    tasplit: context.get('taSplit'),
+                    tapv: context.get('seqId'),
+                    tasource: sourceTraffic
+                };
+            }
+            else if (servlet === 'HotelLander') {
+                segment = 'tahotel';
+                triggit_data = {
+                    ppk: context.get('locale') + 'Pe' + context.get('geoMostPop'),
+                    pt: 'hotel',
+                    pos: context.get('locale'),
+                    tas: sourceCategory === 'flights' ? '4' : sourceCategory === 'hotels' ? '2' : '',
+                    dd: context.get('dateIn'),
+                    cin: newIn,
+                    cout: newOut,
+                    tauid: context.get('reqUnique'),
+                    tacid: context.get('userUnique'),
+                    tasplit: context.get('taSplit'),
+                    tapv: context.get('seqId'),
+                    tasource: sourceTraffic
+                };
+            }
+            else if (servlet === 'ShowForum') {
+                segment = 'tashowforum';
+                triggit_data = {
+                    ppk: context.get('locale') + 'Pe' + context.get('geoMostPop'),
+                    pt: 'hotel',
+                    pos: context.get('locale'),
+                    tas: '7',
+                    dd: context.get('dateIn'),
+                    cin: newIn,
+                    cout: newOut,
+                    tauid: context.get('reqUnique'),
+                    tacid: context.get('userUnique'),
+                    tasplit: context.get('taSplit'),
+                    tapv: context.get('seqId'),
+                    tasource: sourceTraffic
+                };
+            }
+            else if (servlet === 'ShowTopic') {
+                segment = 'tashowtopic';
+                triggit_data = {
+                    ppk: context.get('locale') + 'Pe' + context.get('geoMostPop'),
+                    pt: 'hotel',
+                    pos: context.get('locale'),
+                    tas: '8',
+                    dd: context.get('dateIn'),
+                    cin: newIn,
+                    cout: newOut,
+                    tauid: context.get('reqUnique'),
+                    tacid: context.get('userUnique'),
+                    tasplit: context.get('taSplit'),
+                    tapv: context.get('seqId'),
+                    tasource: sourceTraffic
+                };
+            }
+
+            var triggit_advertiser = context.get('locale') + 'Pe';
+            var triggit_segments = ['ta', segment];
+            if (segment) {
+                loadScript('//dgy6rx5roq02d.cloudfront.net/triggit-analytics.min.js', {async: true});
+            }
+        </script><script type="text/javascript" src="triggit_fbx-v21252124441a_data/triggit-analytics.js" async=""></script>
+    
+
+<img style="display: none;" src="triggit_fbx-v21252124441a_data/px.gif" width="1" height="1"><script src="triggit_fbx-v21252124441a_data/ps"></script><img style="display: none;" src="triggit_fbx-v21252124441a_data/tr.gif" width="1" height="1"></body></html>

@@ -1,0 +1,136 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+    </head>
+    <body>
+        <script data-owner="criteo-tag" src="criteo-v24110354451a_data/event.js" type="text/javascript" async="true"></script><script type="text/javascript">
+            var context = {};
+            context.get = function(key) {
+                return this.hasOwnProperty(key) ? this[key] : '';
+            };
+            (function() {
+                var pairs = window.location.hash.substring(1).split('&');
+                for (var i = 0; i < pairs.length; i++) {
+                    var pair = pairs[i].split('=');
+                    context[pair[0]] = pair[1];
+                }
+            })();
+
+            window.criteo_q = window.criteo_q || [];
+            var criteoPartnerID = '';
+            var criteoFireTestPixel = false;
+            var taDevServerName = ['dev05n', 'dev05', 'hare'];
+            var criteoDomainPattern = new RegExp('^(http|https)://(.*?)/.*$');
+            var criteoPartnerObj = {
+                'tripadvisor.com.ar' : 10500,
+                'tripadvisor.com.au' : 10515,
+                'tripadvisor.com.br' : 10501,
+                'tripadvisor.ca' : 10498,
+                'tripadvisor.dk' : 10502,
+                'tripadvisor.co.id' : 10507,
+                'tripadvisor.ie' : 10505,
+                'tripadvisor.in' : 10514,
+                'tripadvisor.jp' : 3751,
+                'tripadvisor.co.kr' : 10516,
+                'tripadvisor.com.mx' : 10499,
+                'tripadvisor.com.my' : 10512,
+                'tripadvisor.nl' : 10508,
+                'no.tripadvisor.com' : 10503,
+                'pl.tripadvisor.com' : 10506,
+                'tripadvisor.ru' : 10511,
+                'tripadvisor.se' : 10504,
+                'tripadvisor.com.sg' : 10513,
+                'th.tripadvisor.com' : 10510,
+                'tripadvisor.com.tr' : 10509,
+                'tripadvisor.co.uk' : 3289,
+                'tripadvisor.com' : 4653,
+                'tripadvisor.es' : 10926,
+                'tripadvisor.fr' : 10925,
+                'tripadvisor.it' : 10927,
+                'tripadvisor.de' : 10928,
+                'tripadvisor.com.eg' : 10929,
+                'tripadvisor.com.gr' : 10930
+            };
+
+            var pageHref = document.referrer;
+            
+            if (pageHref) {
+                var criteoParsedUrl = pageHref.match(criteoDomainPattern);
+                var criteoDomain;
+
+                if (criteoParsedUrl.length > 2) {
+                    criteoDomain = criteoParsedUrl[2];
+                    if (criteoDomain) {
+                        criteoDomain = criteoDomain.replace('www.', '');
+                    }
+                }
+                
+                // take into consideration any dev environments, remove the dev portion out of the domain and fire as if its the original domain
+                for (var i = 0; i < taDevServerName.length; i++) {
+                    if (criteoDomain.indexOf(taDevServerName[i]) >= 0) {
+                        criteoDomain = criteoDomain.replace(taDevServerName[i] + '.', '');
+                    }
+                }
+                if (criteoDomain.indexOf('dhcp.') >= 0) {
+                    criteoDomain = criteoDomain.replace('dhcp.', '');
+                }
+                
+                criteoPartnerID = criteoPartnerObj[criteoDomain];
+                
+            }
+
+            if (criteoFireTestPixel) {
+                // This is for "future" functionality where we may want to segment the users into Classic vs Test group. 
+                // The Test group is re-using the Geo Campaigns, this is only available for UK and US. Compare the partner ids and replace them.
+                if (criteoPartnerID == 4653) {
+                    criteoPartnerID = 8020; // This is the TripAdvisorGeoUS ID
+                } else if (criteoPartnerID == 3289) {
+                    criteoPartnerID = 8469; // This is the TripAdvisorGeoUK ID
+                }
+            }
+
+            window.criteo_q.push(
+                {event: 'setAccount', account: criteoPartnerID},
+                {event: 'setData', ui_taid: context.get('userUnique')},
+                {event: 'setSiteType', type: context.get('device').toLowerCase() === 'mobile' ? 'm' : 'd'});
+
+            var servlet = context.get('servlet');
+            var sourceCategory = context.get('sourceCategory');
+            if (context.isClickout === 'true') {
+                window.criteo_q.push(
+                    {event: 'setData', si: '2'},
+                    {event: 'viewBasket', item: [{id: context.get('locId'), price: 1, quantity: 1}]});
+            }
+            else if (servlet === 'Hotel_Review' || servlet === 'MobileHotel_Review' ||
+                     servlet === 'ShowUserReviews' || servlet === 'MobileShowUserReviews' ||
+                     servlet === 'CheapFlights' || servlet === 'MobileCheapFlights' ||
+                     servlet === 'CheapFlightsHome' || servlet === 'MobileCheapFlightsHome') {
+                window.criteo_q.push(
+                    {event: 'setData', si: '1'},
+                    {event: 'viewItem', item: context.get('loc1')},
+                    {event: 'viewSearch', checkin_date: context.get('dateIn'), checkout_date: context.get('dateOut')});
+            }
+            else if (servlet === 'HotelLander' && (sourceCategory === 'flights' || sourceCategory === 'hotels')) {
+                window.criteo_q.push(
+                    {event: 'setData', si: '1'},
+                    {event: 'viewItem', item: context.get('loc1')}); // Id for the most popular hotel              
+            }
+            else if (servlet === 'SmartDeals' ||
+                     servlet === 'Hotels' || servlet === 'MobileHotels' || servlet === 'MobileNearbyHotels' ||
+                     servlet === 'HACSearch' || servlet === 'MobileHACSearch') {
+                window.criteo_q.push(
+                    {event: 'setData', si: '1'},
+                    {event: 'viewList', item: [context.get('loc1'), context.get('loc2'), context.get('loc3')]}, // Top 3 hotels displayed
+                    {event: 'viewSearch', checkin_date: context.get('dateIn'), checkout_date: context.get('dateOut')});
+            }
+            else if (servlet === 'Home' || servlet === 'MobileHome') {
+                window.criteo_q.push(
+                    {event: 'setData', si: '1'},
+                    {event: 'viewHome'});
+            }
+        </script>
+
+        <script type="text/javascript" src="criteo-v24110354451a_data/ld.js" async="true"></script>
+    
+
+<div style="display: none;" id="criteo-tags-div"><iframe src="criteo-v24110354451a_data/dis.html" style="display: none;" width="0" height="0"></iframe></div></body></html>

@@ -1,0 +1,40 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+  </head>
+  <body>
+    <script src="facebook_dr-v24085657264a_data/fp.js" async=""></script><script type="text/javascript">
+      // Pull params from URL (argdict maps keys to values or arrays of values)
+      var argdict = {};
+      var args = window.location.hash.substring(1).split("&");
+      for (var i = 0; i < args.length; i++) {
+        var pair = args[i].split("=");
+
+        if (typeof argdict[pair[0]] === "undefined") {
+          argdict[pair[0]] = pair[1];
+        } else if (typeof argdict[pair[0]] === "string") {
+          argdict[pair[0]] = [argdict[pair[0]], pair[1]];
+        } else {
+          argdict[pair[0]].push(pair[1]);
+        }
+      }
+
+      var fb_param = {};
+      if (argdict.isClickout === 'true') {
+        fb_param.pixel_id = encodeURIComponent('6007414318108');
+      } else {
+        fb_param.pixel_id = encodeURIComponent('6013669611614');
+        fb_param.currency = encodeURIComponent('USD');
+      }
+      fb_param.value = '0.00';
+      (function() {
+        var fpw = document.createElement('script');
+        fpw.async = true;
+        fpw.src = location.protocol + '//connect.facebook.net/en_US/fp.js';
+        var ref = document.getElementsByTagName('script')[0];
+        ref.parentNode.insertBefore(fpw, ref);
+      })();
+    </script>
+  
+
+</body></html>

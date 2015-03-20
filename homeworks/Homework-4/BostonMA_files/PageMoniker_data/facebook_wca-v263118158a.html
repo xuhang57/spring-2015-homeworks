@@ -1,0 +1,89 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+  </head>
+  <body>
+    <script src="facebook_wca-v263118158a_data/fbds.js" async=""></script><script type="text/javascript">
+      // Pull params from URL (argdict maps keys to values or arrays of values)
+      var argdict = {};
+      var args = window.location.hash.substring(1).split("&");
+      for (var i = 0; i < args.length; i++) {
+        var pair = args[i].split("=");
+
+        if (typeof argdict[pair[0]] === "undefined") {
+          argdict[pair[0]] = pair[1];
+        } else if (typeof argdict[pair[0]] === "string") {
+          argdict[pair[0]] = [argdict[pair[0]], pair[1]];
+        } else {
+          argdict[pair[0]].push(pair[1]);
+        }
+      }
+      
+      var eventName = encodeURIComponent(argdict.isClickout === 'true' ? 'clickout' : 'pageview');
+      // for Dynamic Product Ads
+      var eventName2 = encodeURIComponent(argdict.isClickout === 'true' ? 'Purchase' : 'ViewContent');
+      var category = encodeURIComponent(argdict.servlet);
+      var device = encodeURIComponent(argdict.device);
+      var dateIn = encodeURIComponent(argdict.dateIn);
+      var dateOut = encodeURIComponent(argdict.dateOut);
+      var geoName = encodeURIComponent(argdict.geoName);
+      var geoId = encodeURIComponent(argdict.geoId);
+      var PropId = encodeURIComponent(argdict.propId);
+      var recommendedPercent = encodeURIComponent(argdict.recPercent);
+      var stars = encodeURIComponent(argdict.stars);
+      var rating = encodeURIComponent(argdict.rating);
+      var productId = encodeURIComponent(geoId + argdict.locale.replace('_' , ''));
+      
+      if (category === 'ShowForum' || category === 'ShowTopic') {
+        category = 'Forum';
+      }
+      
+      //The following code is copy pasted from facebook.
+      (function() {
+        var _fbq = window._fbq || (window._fbq = []);
+        if (!_fbq.loaded) {
+          var fbds = document.createElement('script');
+          fbds.async = true;
+          fbds.src = '//connect.facebook.net/en_US/fbds.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(fbds, s);
+          _fbq.loaded = true;
+        }
+        _fbq.push(['addPixelId', '666624680067334']);
+      })();
+      window._fbq = window._fbq || [];
+      window._fbq.push(['track', 'PixelInitialized', {}]);
+      //End of copy paste from facebook.
+      
+      window._fbq.push(['track', eventName, {
+        'productType' : category,
+        'device' : device,
+        'checkInDate' : dateIn,
+        'checkOutDate' : dateOut,
+        'destinationName' : geoName,
+        'destinationCode' : geoId,
+        'propertyID' : PropId,
+        'percentRating' : recommendedPercent,
+        'hotelClass' : stars,
+        'hotelStarRating' : rating
+      }]);
+      
+      // for Dynamic Product Ads
+      window._fbq.push(['track', eventName2, {
+        'content_type' : 'product',
+        'content_ids' : productId,
+        'productType' : category,
+        'device' : device,
+        'checkInDate' : dateIn,
+        'checkOutDate' : dateOut,
+        'destinationName' : geoName,
+        'destinationCode' : geoId,
+        'propertyID' : PropId,
+        'percentRating' : recommendedPercent,
+        'hotelClass' : stars,
+        'hotelStarRating' : rating
+      }]);
+    </script>
+  
+
+</body></html>

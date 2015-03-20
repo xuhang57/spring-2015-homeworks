@@ -1,0 +1,76 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"></head><body>
+<script type="text/javascript">
+	// pixel implementation from choicestream - edit with caution
+
+	//function to call 1x1
+	var loadPixel = function(url) {
+		var tag = document.createElement('img');
+		tag['src'] = url;
+		tag['height'] = 1;
+		tag['width'] = 1;
+		document.body.appendChild(tag);
+	};
+
+	//gets object key values from location hash
+	var keyvalues = {};
+	keyvalues.prop = function(name) {
+		if (this.hasOwnProperty(name)) {
+			return this[name];
+		} else {
+			return '';
+		}
+	};
+
+	var params = window.location.hash.substring(1).split('&');
+	for (var i = 0; i < params.length; i++) {
+		var thisobj = params[i].split('=');
+		keyvalues[thisobj[0]] = thisobj[1];
+	}
+
+	//vars to pass back
+	var locId = encodeURIComponent(keyvalues.prop('locId') ? keyvalues.prop('locId') : keyvalues.prop('loc1'));
+	var dateOut = encodeURIComponent(keyvalues.prop('dateOut'));
+	var dateIn = encodeURIComponent(keyvalues.prop('dateIn'));
+	var servlet = encodeURIComponent(keyvalues.prop('servlet'));
+	var geoId = encodeURIComponent(keyvalues.prop('geoId'));
+
+	var seg_pixel = function(seg_id) {
+		return 'https://secure.adnxs.com/seg?add=' + seg_id + '&t=2';
+	};
+
+	var c_pixel = function(px_id, seg_id, order_id) {
+		return 'https://secure.adnxs.com/px?id=' + px_id + '&seg=' + seg_id + '&order_id=' + locId + '-' + geoId + '&t=2';
+	};
+
+	var servlet_pixels_ids = {
+		'ShowUserReviews': '2091198',
+		'Hotel_Review': '2091193',
+		'HotelLander': '2091194',
+		'SmartDeals': '2091296',
+		'Tourism':'2091295',
+		'CheapFlights': '2091313',
+		'HACSearch': '2091291',
+		'Hotels': '2091315',
+		'HotelHighlight': '2091192'
+	};
+
+	if (keyvalues.isClickout === 'true') {
+		loadPixel(c_pixel('350905','2091077',locId));
+		loadPixel(c_pixel('350906','2091080',locId));
+		loadPixel(c_pixel('350907','2091082',locId));
+	} else {
+		if (dateOut || dateIn) {
+			loadPixel(seg_pixel('2091197'));
+		} else {
+			loadPixel(seg_pixel('2091195'));
+		}
+		if (servlet_pixels_ids.hasOwnProperty(servlet)) {
+			var this_pixel = seg_pixel(servlet_pixels_ids[servlet]);
+			loadPixel(this_pixel);
+		}
+	}
+</script><img src="choicestream_2-v2329098649a_data/seg.gif" width="1" height="1"><img src="choicestream_2-v2329098649a_data/seg_002.gif" width="1" height="1">
+
+
+</body></html>

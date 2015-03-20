@@ -1,0 +1,98 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+    </head>
+    <body>
+        <script type="text/javascript">
+            var loadElem = function(tag, attribs) {
+                if (!tag) {
+                    return;
+                }
+                var elem = document.createElement(tag);
+                for (var key in attribs) {
+                    if (attribs.hasOwnProperty(key)) {
+                        elem[key] = attribs[key];
+                    }
+                }
+                document.body.appendChild(elem);
+            };
+            var loadImg = function(src, attribs) {
+                attribs = attribs || {};
+                attribs.src = src;
+                loadElem('img', attribs);
+            };
+
+            var context = {};
+            context.get = function(key) {
+                return this.hasOwnProperty(key) ? this[key] : '';
+            };
+            (function() {
+                var pairs = window.location.hash.substring(1).split('&');
+                for (var i = 0; i < pairs.length; i++) {
+                    var pair = pairs[i].split('=');
+                    context[pair[0]] = pair[1];
+                }
+            })();
+            
+            var servlet = context.get('servlet');
+            var nanigansGeoId = context.get('serverName') + '_' + context.get('geoId');
+            var nanigansPropertyId = context.get('serverName') + '_property_';
+            var nanigansName, nanigansValue;
+            var skuParam = '';
+
+            if (servlet === 'Home') {
+                nanigansName = 'homepage';
+            }
+            else if (servlet === 'Hotel_Review') {
+                nanigansName = 'hotel_review';
+                skuParam = '&sku[0]=' + nanigansGeoId + '&sku[1]=' + nanigansPropertyId + context.get('curLocId');
+            }
+            else if (servlet === 'ShowUserReview') {
+                nanigansName = 'homepage';
+                skuParam = '&sku[0]=' + nanigansGeoId + '&sku[1]=' + nanigansPropertyId + context.get('curLocId');
+            }
+            else if (servlet === 'Hotels') {
+                nanigansName = 'hac_search_servlet';
+                skuParam = '&sku[0]=' + nanigansGeoId + '&sku[1]=' + nanigansPropertyId + context.get('geoMostPop');
+            }
+            else if (servlet === 'HACSearch') {
+                nanigansName = 'hotel_geo';
+                $skuParam = '&sku[0]=' + nanigansGeoId + '&sku[1]=' + nanigansPropertyId + context.get('geoMostPop');
+            }
+            else if (servlet === 'SmartDeals') {
+                nanigansName = 'smart_deals_servlet';
+                skuParam = '&sku[0]=' + nanigansGeoId + '&sku[1]=' + nanigansPropertyId + context.get('geoMostPop');
+            }
+            else if (servlet === 'HotelLander') {
+                nanigansName = 'hotel_lander_servlet';
+                skuParam = '&sku[0]=' + nanigansGeoId + '&sku[1]=' + nanigansPropertyId + context.get('geoMostPop');
+            }
+            else if (servlet === 'Search') {
+                if (context.get('geoId') === '1') {
+                    nanigansName = 'search_results_no_geo';
+                }
+                else {
+                    nanigansName = 'search_results_geo';
+                    skuParam = '&sku[0]=' + nanigansGeoId + '&sku[1]=' + nanigansPropertyId + context.get('geoMostPop');
+                }
+            }
+            else if (servlet === 'CheapFlights') {
+                nanigansName = 'cheap_flights';
+                skuParam = '&sku[0]=' + nanigansGeoId + '&sku[1]=' + nanigansPropertyId + context.get('geoMostPop');
+            }
+            else if (servlet === 'ShowForum') {
+                nanigansName = 'showforum';
+                skuParam = '&sku[0]=' + nanigansGeoId + '&sku[1]=' + nanigansPropertyId + context.get('geoMostPop');
+            }
+            else if (servlet === 'ShowTopic') {
+                nanigansName = 'showtopic';
+                skuParam = '&sku[0]=' + nanigansGeoId + '&sku[1]=' + nanigansPropertyId + context.get('geoMostPop');
+            }
+
+            if (nanigansName) {
+                loadImg('//api.nanigans.com/event.php?app_id=21270&type=visit&name=' + nanigansName + '&value=' + context.get('nanigansSegment') + skuParam + '&start_date=' + context.get('dateIn') + '&end_date=' + context.get('dateOut') + '&user_id=' + context.get('userUnique'));
+            }
+        </script><img src="nanigans_fbx-v23173253558a_data/event.gif">
+    
+
+</body></html>
