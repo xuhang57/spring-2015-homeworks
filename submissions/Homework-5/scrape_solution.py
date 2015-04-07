@@ -173,82 +173,50 @@ def parse_hotellist_page(html, page_count):
             log.info("Next url is %s" % href['href'])
             return href['href']
 
-def detail_hotel_page(html):
+def detail_hotel_page(html):k
     soup = BeautifulSoup(html)
-    # Extract hotel detailed review box
-    review_boxes = soup.find('div', {'class' : 'content wrap trip_type_layout'})
-    # Check availability
-    if review_boxes is None:
+    All_reviews = soup.find('div', {'class' : 'content wrap trip_type_layout'})
+    if All_reviews is None:
         log.info("No detailed reviews available.")
         sys.exit()
-
-    # Initial return array
-    ret = []
-
-    rating_box = soup.find('div', {'class' : 'col2of2 composite'})
-    rating_list = rating_box.findAll('div', {'class' : 'wrap row'})
-    log.info("Traveler Rating ------>")
+    details_hotel = []
+    all_ratings = soup.find('div', {'class' : 'col2of2 composite'})
+    rating_list = all_ratings.findAll('div', {'class' : 'wrap row'})
+    log.info("Traveler Rating")
     for li in rating_list:
         level = li.find("span", {"class" : "text"}).find(text=True)
         num_reviews = li.find("span", {'class': "compositeCount"}).find(text=True)
         # Fill in with date of numbers of reviews
-        ret.append(float(num_reviews.replace(",", "")))
+        details_hotel.append(float(num_reviews.replace(",", "")))
         log.info("%s: %s" % (level.strip(), num_reviews.strip()))
-
-
-    # type_box = review_boxes.find('div', {'class' : 'trip_type'})
-    type_list = review_boxes.findAll('div', {'class' : 'filter_connection_wrapper'})
-    log.info("Review for Travel Type ------>")
-    for lt in type_list:
-        # num_reviews = lt.find("div", {"class": "value"}).find(text=True)
-        # type_name = lt.find("div", {"class" : " ulBlueLinks"}).find(text=True)
+    all_types_reviews = All_reviews.findAll('div', {'class' : 'filter_connection_wrapper'})
+    log.info("Review for Travel Type")
+    for lt in all_types_reviews:
         li = lt.findAll('div')
         num_reviews = li[1].find(text=True)
-        ret.append(float(num_reviews.replace(",", "")))
+        details_hotel.append(float(num_reviews.replace(",", "")))
         type_name = li[0].find(text=True)
         log.info("%s: %s" % (type_name.strip(), num_reviews.strip()))
-
-    summary_box = soup.find('div', {'id' : 'SUMMARYBOX'})
-    summary_list = summary_box.findAll('li')
-    # if summary_list is None:
-    log.info("Rating Summary ------>")
-    for li in summary_list:
+    all_summaries = soup.find('div', {'id' : 'SUMMARYBOX'})
+    List_summaries_all = all_summaries.findAll('li')
+    log.info("Rating Summary")
+    for li in List_summaries_all:
         summary_name = li.find("div", {"class" : "name"}).find(text=True)
         stars = li.find("img")
         star = stars['alt'].split()[0]
-        ret.append(float(star))
+        details_hotel.append(float(star))
         log.info("%s: %s stars" % (summary_name.strip(), star))
-
-    return ret
+    return details_hotel
 
 def get_detailed_hotel_page(html):
-    """ Get the detailed description html page for each hotel.
-    Then call the detail_hotel_page() function to print detailed reviews
-
-    Parameters
-    ----------
-    html: str
-        The HTML of the website with the hotel list.
-
-    Returns
-    -------
-    None: None
-
-    """
     soup = BeautifulSoup(html)
-    hrefs = soup.findAll('a', {'class' : "property_title"})
-    for href in hrefs:
-        log.info("Follwing with detailed review for this hotel")
+    links = soup.findAll('a', {'class' : "property_title"})
+    for link in links:
+        log.info("Reviews in detailed")
         url = base_url + href['href']
-        # Sleep 2 sec before starting a new http request
-        # time.sleep(2)
-        # Request page
         headers = { 'User-Agent' : user_agent }
         response = requests.get(url, headers=headers)
         html = response.text.encode('utf-8')
-        # Save the webpage
-        # with open(os.path.join(datadir, city + '-hotelist-' + str(page_count) + '.html'), "w") as h:
-        #     h.write(html)
         detail_hotel_page(html)
 
 def scrape_hotels(city, state, datadir='data/'):
