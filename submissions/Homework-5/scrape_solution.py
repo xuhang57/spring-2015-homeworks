@@ -173,6 +173,17 @@ def parse_hotellist_page(html, page_count):
             log.info("Next url is %s" % href['href'])
             return href['href']
 
+def get_detailed_hotel_page(html):
+    soup = BeautifulSoup(html)
+    links = soup.findAll('a', {'class' : "property_title"})
+    for link in links:
+        log.info("Reviews in detailed")
+        url = base_url + href['href']
+        headers = { 'User-Agent' : user_agent }
+        response = requests.get(url, headers=headers)
+        html = response.text.encode('utf-8')
+        detail_hotel_page(html)
+        
 def detail_hotel_page(html):k
     soup = BeautifulSoup(html)
     All_reviews = soup.find('div', {'class' : 'content wrap trip_type_layout'})
@@ -208,16 +219,6 @@ def detail_hotel_page(html):k
         log.info("%s: %s stars" % (summary_name.strip(), star))
     return details_hotel
 
-def get_detailed_hotel_page(html):
-    soup = BeautifulSoup(html)
-    links = soup.findAll('a', {'class' : "property_title"})
-    for link in links:
-        log.info("Reviews in detailed")
-        url = base_url + href['href']
-        headers = { 'User-Agent' : user_agent }
-        response = requests.get(url, headers=headers)
-        html = response.text.encode('utf-8')
-        detail_hotel_page(html)
 
 def scrape_hotels(city, state, datadir='data/'):
     """Runs the main scraper code
